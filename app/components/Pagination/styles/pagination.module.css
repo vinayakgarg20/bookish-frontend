@@ -1,0 +1,73 @@
+.pagination {
+  display: flex;
+  padding: 4px 8px;
+  align-self: flex-end;
+  align-items: center;
+  gap: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-e-9-e-8-e-9200-n, #e9e8e9);
+  background: #fff;
+}
+
+.arrowButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.arrowButton:hover .icon,
+.arrowButton:active .icon {
+  filter: brightness(0.8);
+}
+
+.arrowButton.disabled {
+  cursor: not-allowed;
+}
+
+.arrowButton.disabled .icon {
+  filter: grayscale(1);
+}
+
+.pageNumberContainer {
+  display: flex;
+  align-items: center;
+}
+
+.pageButton {
+  display: flex;
+  padding: 4px 8px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  color: var(--neutral-272127700-n-paz-black, #272127);
+text-align: center;
+border: none;
+/* Text/Footnote/Inter - FN (13px, Semibold) */
+font-family: Inter,sans-serif;
+font-size: 13px;
+font-style: normal;
+font-weight: 600;
+line-height: 18px; /* 138.462% */
+}
+
+.pageButton:hover {
+  background: var(--neutral-e-9-e-8-e-9200-n, #e9e8e9);
+}
+
+.pageButton:active,
+.pageButton.active {
+  background: var(--neutral-0-c-0-c-0-f-1000-n, #0c0c0f);
+  color: var(--neutral-ffffff-natural-white, var(--neutral-ffffff-natural-white, #FFF));
+}
+
+.pageButton.active {
+  cursor: default;
+}
