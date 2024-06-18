@@ -1,8 +1,15 @@
 import Search from "@/app/assets/icons/search.svg";
+import FiveStarRating from "@/app/assets/icons/FiveStarRatings.svg";
+import RatingGraph from "@/app/assets/icons/rating-graph.svg";
+import BookCardCover from "@/app/assets/icons/BookCard.svg";
+import BookCover from "@/app/assets/icons/bookCover.svg";
+import DividerIcon from "@/app/assets/icons/divider.svg";
+import FavoriteIcon from "@/app/assets/icons/favorite-icon.svg";
+import FavoriteIconFilled from "@/app/assets/icons/favorite-filled.svg";
 import BookishLogo from "@/app/assets/icons/bookish-logo.svg";
 import UserProfile from "@/app/assets/icons/user-profile-green.svg";
 import ReportsIcon from "@/app/assets/icons/reports-icon.svg";
-import ProfilePic from "@/app/assets/icons/profile-pic.svg"
+import ProfilePic from "@/app/assets/icons/profile-pic.svg";
 import RequisitionIcon from "@/app/assets/icons/requisitions-icon.svg";
 import CalendarIcon from "@/app/assets/icons/calendar-icon.svg";
 import CandidatesIcon from "@/app/assets/icons/candidates-icon.svg";
@@ -54,7 +61,7 @@ import GreyLogoIcon from "@/app/assets/icons/logo-grey.svg";
 import BackIcon from "@/app/assets/icons/back-icon.svg";
 import BackIconInactive from "@/app/assets/icons/back-icon-inactive.svg";
 import FrontIconInactive from "@/app/assets/icons/front-icon-inactive.svg";
-import FrontIcon from "@/app/assets/icons/front-icon.svg"
+import FrontIcon from "@/app/assets/icons/front-icon.svg";
 import EyeOnIcon from "@/app/assets/icons/eye-on.svg";
 import EyeOffIcon from "@/app/assets/icons/eye-off.svg";
 import ResumeIcon from "@/app/assets/icons/resume-icon.svg";
@@ -94,14 +101,19 @@ import SuccessIcon from "@/app/assets/icons/success-icon.svg";
 import DropDownIconDown from "@/app/assets/icons/dropdownIcon-down.svg";
 import DropDownIconUp from "@/app/assets/icons/dropdownIcon-up.svg";
 import DownArrowBgWhite from "@/app/assets/icons/down-arrow-bgwhite.svg";
-import LeftArrow from "@/app/assets/icons/left-arrow.svg"
+import LeftArrow from "@/app/assets/icons/left-arrow.svg";
 export {
+  FiveStarRating,
+  RatingGraph,
+  BookCover,
   Search,
   UserProfile,
   BookishLogo,
+  BookCardCover,
   UpArrowIcon,
-
-  
+  FavoriteIcon,
+  FavoriteIconFilled,
+  DividerIcon,
   DownArrowBgWhite,
   LeftArrow,
   ReportsIcon,
@@ -109,6 +121,7 @@ export {
   RequisitionIcon,
   CandidatesIcon,
   BackIconInactive,
+
   FrontIconInactive,
   FrontIcon,
   ErrorIcon,

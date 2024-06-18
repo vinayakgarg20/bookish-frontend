@@ -1,0 +1,52 @@
+.bookDetailsContainer {
+  display: flex;
+  /* width: 772px; */
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.bookHeadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+.bookName {
+  background: linear-gradient(90deg, #000 0.18%, #4f5967 99.96%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: Manrope;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.bookInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+.name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  color: #384149;
+  text-overflow: ellipsis;
+  font-family: Manrope;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.bookDescription {
+  color: #212121;
+  font-family: Manrope;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  align-self: stretch;
+}

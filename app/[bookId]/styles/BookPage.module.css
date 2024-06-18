@@ -1,0 +1,17 @@
+.main {
+  background: #fcfcfe;
+}
+.bookDetailsContainer{
+    display: flex;
+    padding: 80px 160px;
+    justify-content: space-around;
+    gap:48px;
+    flex-wrap: nowrap;
+}
+.bookDetailsAndReviews {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}

@@ -5,7 +5,11 @@ import Image from "next/image";
 import { BackIcon, FrontIcon } from "@/app/assets/icons/config";
 import { PaginationProps } from "@/app/components/Pagination/constants/interface";
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}) => {
   const {
     isPrevDisabled,
     isNextDisabled,
@@ -20,17 +24,25 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   return (
     <div className={styles.pagination}>
       <button
-        className={`${styles.arrowButton} ${isPrevDisabled ? styles.disabled : ""}`}
+        className={`${styles.arrowButton} ${
+          isPrevDisabled ? styles.disabled : ""
+        }`}
         onClick={handlePrevPage}
         disabled={isPrevDisabled}
       >
-        <Image src={BackIcon} alt="Previous Page" className={`${styles.icon} ${styles.prevIcon}`} />
+        <Image
+          src={BackIcon}
+          alt="Previous Page"
+          className={`${styles.icon} ${styles.prevIcon}`}
+        />
       </button>
       <div className={styles.pageNumberContainer}>
         {pageNumbers.map((page) => (
           <button
             key={page}
-            className={`${styles.pageButton} ${page === currentPage ? styles.active : ""}`}
+            className={`${styles.pageButton} ${
+              page === currentPage ? styles.active : ""
+            }`}
             onClick={() => handlePageChange(page)}
             disabled={page === currentPage}
           >
@@ -39,11 +51,17 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         ))}
       </div>
       <button
-        className={`${styles.arrowButton} ${isNextDisabled ? styles.disabled : ""}`}
+        className={`${styles.arrowButton} ${
+          isNextDisabled ? styles.disabled : ""
+        }`}
         onClick={handleNextPage}
         disabled={isNextDisabled}
       >
-        <Image src={FrontIcon} alt="Next Page" className={`${styles.icon} ${styles.nextIcon}`} />
+        <Image
+          src={FrontIcon}
+          alt="Next Page"
+          className={`${styles.icon} ${styles.nextIcon}`}
+        />
       </button>
     </div>
   );

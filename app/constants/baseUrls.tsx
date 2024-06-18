@@ -1,11 +1,11 @@
 export const BaseUrls = {
     AUTH: 'http://localhost:5000/api/auth',
-    DASHBOARD: 'http://localhost:5000/api/books',
+    BOOKS: 'http://localhost:5000/api/books',
 }
 
 export enum ServiceType {
     AUTH = 'AUTH',
-    DASHBOARD = 'DASHBOARD',
+    BOOKS = 'BOOKS',
 }
 
 export enum ApiType {

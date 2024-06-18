@@ -13,7 +13,16 @@ const BookList: React.FC<BookListProps> = ({ books, onFavoriteToggle }) => {
   return (
     <div className={styles.grid}>
       {books.map((book) => (
-        <BookCard key={book.id} book={book} onFavoriteToggle={onFavoriteToggle} />
+        <BookCard key={book._id} book={book} onFavoriteToggle={onFavoriteToggle} />
+      ))}
+      {books.map((book) => (
+        <BookCard key={book._id} book={book} onFavoriteToggle={onFavoriteToggle} />
+      ))}
+      {books.map((book) => (
+        <BookCard key={book._id} book={book} onFavoriteToggle={onFavoriteToggle} />
+      ))}
+      {books.map((book) => (
+        <BookCard key={book._id} book={book} onFavoriteToggle={onFavoriteToggle} />
       ))}
     </div>
   );

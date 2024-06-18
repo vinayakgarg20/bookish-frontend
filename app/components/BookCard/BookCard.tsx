@@ -3,6 +3,15 @@ import React from "react";
 import { Book } from "@/app/interfaces/Book";
 import styles from "./styles/BookCard.module.css";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import {
+  BookCover,
+  BookCardCover,
+  FavoriteIcon,
+  FavoriteIconFilled,
+  YellowStarIcon,
+} from "@/app/assets/icons/config";
+import { RatingCardSmall } from "@/app/[bookId]/components/Reviews/Components/ReviewCard/ReviewCard";
 
 interface BookCardProps {
   book: Book;
@@ -10,28 +19,52 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book, onFavoriteToggle }) => {
+  const router = useRouter();
+  console.log(book, "⚒️⚒️");
+  const bookId = book._id;
   return (
     <div className={styles.card}>
-      <Image src={book.coverImage} alt={book.title} className={styles.coverImage} />
-      <div className={styles.details}>
-        <h3 className={styles.title}>{book.title}</h3>
-        <p className={styles.author}>{book.author}</p>
-        <div className={styles.rating}>
-          {[...Array(5)].map((_, index) => (
-            <span
-              key={index}
-              className={`${styles.star} ${index < Math.floor(book.averageRating) ? styles.filled : ""}`}
-            >
-              &#9733;
-            </span>
-          ))}
-        </div>
-        <button
-          className={`${styles.favoriteButton} ${book.isFavorite ? styles.isFavorite : ""}`}
-          onClick={() => onFavoriteToggle(book.id)}
+      <div className={styles.coverContainer}>
+        <Image
+          onClick={() => {
+            router.push(`/${bookId}`);
+          }}
+          src={BookCardCover}
+          width={200}
+          height={300}
+          alt={book.title}
+        />
+        <div
+          className={styles.toggleFavorite}
+          onClick={() => onFavoriteToggle(book._id)}
         >
-          {book.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-        </button>
+          <Image
+            src={book.isFavorite ? FavoriteIconFilled : FavoriteIcon}
+            width={20}
+            height={20}
+            alt={"toggle favorite"}
+          />
+        </div>
+      </div>
+      <div
+        className={styles.details}
+        onClick={() => {
+          router.push(`/${bookId}`);
+        }}
+      >
+        <div className={styles.title}>{book.title}</div>
+        <div className={styles.author}>{book.author}</div>
+        <div className={styles.ratingContainer}>
+          <div className={styles.rating}>
+            <div className={styles.ratingIcon}>
+              <Image src={YellowStarIcon} width={14} height={14} alt="rating" />
+            </div>
+            <div className={styles.ratingNumber}>{book.averageRating}</div>
+          </div>
+          <div className={styles.reviewCount}>
+            from {book.reviews ? `${book.reviews.length} reviews` : `0 review`}{" "}
+          </div>
+        </div>
       </div>
     </div>
   );

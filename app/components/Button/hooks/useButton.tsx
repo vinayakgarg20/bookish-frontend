@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { ButtonProps } from "@/app/components/Button/constants/interface";
 import Image from "next/image";
-import { DropDownIcon, DropUpIcon, DownArrowBgWhite } from "@/app/assets/icons/config";
+import {
+  DropDownIcon,
+  DropUpIcon,
+  DownArrowBgWhite,
+} from "@/app/assets/icons/config";
 
 const useButton = (props: ButtonProps) => {
   const {
@@ -60,19 +64,24 @@ const useButton = (props: ButtonProps) => {
     );
   };
   // const dropDownIconSrc = dropdownOpen ? DropUpIcon : DropDownIcon;
-  const dropDownIconSrc = dropdownIcons ? dropdownOpen ? dropdownIcons.openIcon : dropdownIcons.closeIcon : dropdownOpen ? DropUpIcon : DropDownIcon;
+  const dropDownIconSrc = dropdownIcons
+    ? dropdownOpen
+      ? dropdownIcons.openIcon
+      : dropdownIcons.closeIcon
+    : dropdownOpen
+    ? DropUpIcon
+    : DropDownIcon;
   const renderDropDownIcon = (
     toggleDropDown: () => void,
     multipleActionStyles?: React.CSSProperties
   ) => {
     return (
-      <div onClick={toggleDropDown} style={multipleActionStyles} >
+      <div onClick={toggleDropDown} style={multipleActionStyles}>
         <Image
           src={dropDownIconSrc as string}
           alt=""
           width={iconWidth}
           height={iconHeight}
-
         />
       </div>
     );

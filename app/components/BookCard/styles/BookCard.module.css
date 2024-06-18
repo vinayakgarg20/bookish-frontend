@@ -1,18 +1,113 @@
 .card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #fffcfc 0%, #fff 100%);
+  box-shadow: 0px 2px 12px 0px rgba(50, 8, 8, 0.08);
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
 }
-.headerContainer{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 100%;
+.coverContainer {
+  width: 200px;
+  height: 300px;
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 1.622px;
+  border: 0.811px solid rgba(0, 0, 0, 0.05);
+  background: #fff;
 }
-.headerFieldContainer {
-    display: flex;
-   
+.toggleFavorite {
+  border-radius: 3.243px;
+  background: #fff;
+  box-shadow: 0px 0px 0.76px 0px rgba(12, 26, 75, 0.24),
+    0px 2.28px 6.079px -0.76px rgba(50, 50, 71, 0.05);
+  display: flex;
+  width: 32px;
+  height: 32px;
+  padding: 3.243px 4.865px;
+  justify-content: center;
+  align-items: center;
+  gap: 1.622px;
+  flex-shrink: 0;
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
-.field {
-    display: flex;
+.coverImage {
+  display: block;
+}
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  align-self: stretch;
+}
+.title {
+  overflow: hidden;
+  color: #384149;
+  text-overflow: ellipsis;
+  font-family: Manrope;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  align-self: stretch;
+}
+.author {
+  overflow: hidden;
+  color: #778493;
+  text-overflow: ellipsis;
+  font-family: Manrope;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-self: stretch;
+}
+.ratingContainer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rating {
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.02);
+  background: #fff;
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.4) inset,
+    0px 0px 1px 0px rgba(12, 26, 75, 0.2) inset,
+    0px 2.811px 7.497px -0.937px rgba(50, 50, 71, 0.05) inset;
+  display: flex;
+  padding: 4px 8px 4px 6px;
+  align-items: center;
+  gap: 2px;
+}
+.ratingIcon {
+  display: flex;
+  align-items: center;
+  /* padding-bottom: 2px; */
+  padding-bottom: 3px;
+}
+.ratingNumber {
+  color: #493838;
+  font-family: Manrope;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 100%; /* 14px */
+}
+.reviewCount {
+  color: #778493;
+  font-family: Manrope;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }

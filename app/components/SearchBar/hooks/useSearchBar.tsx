@@ -3,7 +3,7 @@ import React from "react";
 
 export const useSearchBar = () => {
   const [query, setQuery] = React.useState("");
-  const [heading,setHeading]=React.useState(true);
+  const [heading, setHeading] = React.useState(true);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setHeading(false);
     setQuery(event.target.value);
@@ -19,6 +19,6 @@ export const useSearchBar = () => {
     query,
     handleInputChange,
     handleSearch,
-    heading
+    heading,
   };
 };

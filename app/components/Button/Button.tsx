@@ -46,11 +46,11 @@ const Button: React.FC<ButtonProps> = (props) => {
   };
 
   return (
-    <div style={buttonContainerMain}>
+    <div className={styles.mainContainer} style={buttonContainerMain}  onClick={handleClick}>
       <button
         className={styles.button}
         style={buttonStyles}
-        onClick={handleClick}
+       
         disabled={isLoading || disabled}
       >
         {isLoading ? (
