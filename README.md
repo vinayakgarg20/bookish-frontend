@@ -91,9 +91,15 @@ Repository: [book-review-app-backend](https://github.com/vinayakgarg20/bookish-b
 
 This application uses MongoDB Atlas as the online database provider. To set up the database:
 
-1. Update the `MONGODB_URI` environment variable in the backend's `.env` file with your MongoDB Atlas connection string given below.
-2. mongodb+srv://<username>:<password>@bookreviewcluster.asrdiqr.mongodb.net/?retryWrites=true&w=majority&appName=BookReviewCluster
-3. Replace <password> with the password for the <username> user. 
+ Update the `MONGODB_URI` environment variable in the backend's `.env` file with your MongoDB Atlas connection string given below.
+
+```
+mongodb+srv://<username>:<password>@bookreviewcluster.asrdiqr.mongodb.net/?retryWrites=true&w=majority&appName=BookReviewCluster
+```
+Replace <password> with the password for the <username> user.
+```
+ testing credentials : { username: testingUser , password: hRLyBokLQpXhD8Hr}
+```
 
 ## Additional Notes
 
