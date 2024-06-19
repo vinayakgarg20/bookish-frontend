@@ -1,10 +1,14 @@
-# bookish-a book review application
+# bookish-backend
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 # Book Review Application
 
 This is a full stack web application for book reviews built with Next.js, TypeScript, Express.js, Node.js, and MongoDB. The application consists of two separate repositories for the frontend and backend.
+
+## API Schema and dummy data (Notion Documentation)
+
+I've created an API documentation at notion, which includes API schema and seed data information. (https://marbled-clef-9c0.notion.site/Book-Review-Application-API-Template-dummy-data-2aafbf3043ea47998fdda360ce3ec0f8)
 
 ## Frontend Repository
 
