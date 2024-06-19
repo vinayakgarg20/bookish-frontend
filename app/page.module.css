@@ -1,3 +1,41 @@
-.homePage{
-    background: #FCFCFE;
+.homePage {
+  background: #fcfcfe;
+  color: black;
+}
+.showFavorites {
+  display: flex;
+  width: 100%;
+  padding: 0px 160px;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.favoritesContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+}
+.favoriteButton {
+    cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid #e2e2ea;
+  background: #fff;
+  display: flex;
+  padding: 7px 12px;
+  align-self: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+.divider{
+    height: 1px;
+    border-bottom:1px solid black;
+}
+.favoriteButton div {
+  color: #44444f;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 171.429% */
+  letter-spacing: 0.1px;
 }

@@ -1,4 +1,3 @@
-// components/BookCard/BookCard.tsx
 import React from "react";
 import { Book } from "@/app/interfaces/Book";
 import styles from "./styles/BookCard.module.css";
@@ -11,7 +10,6 @@ import {
   FavoriteIconFilled,
   YellowStarIcon,
 } from "@/app/assets/icons/config";
-import { RatingCardSmall } from "@/app/[bookId]/components/Reviews/Components/ReviewCard/ReviewCard";
 
 interface BookCardProps {
   book: Book;
@@ -20,7 +18,6 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({ book, onFavoriteToggle }) => {
   const router = useRouter();
-  console.log(book, "⚒️⚒️");
   const bookId = book._id;
   return (
     <div className={styles.card}>

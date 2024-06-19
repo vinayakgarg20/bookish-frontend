@@ -1,5 +1,6 @@
 .main {
   background: #fcfcfe;
+  color: black;
 }
 .bookDetailsContainer{
     display: flex;

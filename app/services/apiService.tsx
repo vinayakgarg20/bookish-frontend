@@ -1,14 +1,8 @@
-import { ResponseTypes } from "@/app/constants/enum";
 import { toast } from "react-toastify";
-import {
-  ApiType,
-  BaseUrls,
-  ContentTypes,
-  ServiceType,
-} from "@/app/constants/baseUrls";
+import { ApiType, BaseUrls, ContentTypes, ServiceType } from "@/app/utils/baseUrls";
 
 export const showErrorToast = (message?: string) => {
-  toast(message || "Something went wrong", { type: "error" });
+  toast.error(message || "Something went wrong");
 };
 
 export const handleApiResponse = async (response: Response) => {
@@ -16,12 +10,15 @@ export const handleApiResponse = async (response: Response) => {
     const responseData = await response.json();
 
     if (!response.ok) {
-      // Handle error responses
-      showErrorToast(responseData.error || "Something went wrong");
+      if (response.status === 401) {
+        const event = new CustomEvent('unauthorized', { detail: response });
+        window.dispatchEvent(event);
+      } else {
+        showErrorToast(responseData.error || "Something went wrong");
+      }
       return { error: responseData.error || "Something went wrong" };
     }
 
-    // Handle successful responses
     return { data: responseData };
   } catch (err) {
     showErrorToast(err?.toString() || "Something went wrong");
@@ -39,7 +36,7 @@ export const deleteApi = async (
   headers?: any
 ) => {
   const response = await callFetchApi(
-    ApiType.POST,
+    ApiType.DELETE,
     getFinalUrl(url, service),
     data,
     ContentTypes.JSON,
@@ -48,6 +45,7 @@ export const deleteApi = async (
   );
   return response;
 };
+
 export const postApi = async (
   url: string,
   data: any,
@@ -110,7 +108,7 @@ export const callFetchApi = async (
     method,
     headers: {
       "Content-type": contentType || ContentTypes.JSON,
-      ...(headers || {}), // This will handle the case when headers is undefined
+      ...(headers || {}),
     },
   };
 

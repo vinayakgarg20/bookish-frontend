@@ -13,38 +13,38 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
-  const handleSearch = () => {
-    onSearch(query);
+    const newQuery = event.target.value;
+    setQuery(newQuery);
+    onSearch(newQuery);
   };
 
   return (
     <div className={styles.searchBarContainer}>
       {!isFocused && (
-        <div className={styles.heading}>Discover your favorite books</div>
+        <div className={styles.containerHeading}>Discover your favorite books</div>
       )}
-      <div
-        className={`${styles.searchBar} ${isFocused ? styles.focused : ""}`}
-        onClick={handleSearch}
-      >
-        <span className={styles.searchIcon}>
-          <Image src={Search} alt="Search" width={24} height={24} />
-        </span>
-        <input
-          className={styles.searchInput}
-          type="text"
-          placeholder="Search by title, author or genre"
-          value={query}
-          onChange={handleInputChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-        />
-        {isFocused && (
-          <div className={styles.resultLabel}>Showing results for ${query}</div>
-        )}
+      <div className={styles.searchBarContainer}>
+        <div className={styles.searchBar}>
+          <span className={styles.searchBarIcon}>
+            <Image src={Search} alt="Search" width={24} height={24} />
+          </span>
+          <input
+            className={` ${isFocused ? styles.focusedInput : styles.searchInput}`}
+            type="text"
+            placeholder="Search for your favorite book, author or genre"
+            value={query}
+            onChange={handleInputChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+          />
+        </div>
       </div>
+      {isFocused && (
+        <div className={styles.resultLabel}>
+          <p>Showing results for</p>
+          <span>{query}</span>
+        </div>
+      )}
     </div>
   );
 };

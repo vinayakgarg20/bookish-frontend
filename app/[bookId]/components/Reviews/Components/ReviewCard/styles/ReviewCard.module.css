@@ -26,7 +26,6 @@
 }
 .username {
   color: #212121;
-  font-family: Manrope;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -34,7 +33,6 @@
 }
 .reviewDate {
   color: #212121;
-  font-family: Manrope;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -54,13 +52,12 @@
   gap: 2px;
 }
 .ratingIcon {
- display: flex;
- align-items: center;
- /* padding-bottom: 2px; */
+  display: flex;
+  align-items: center;
+  /* padding-bottom: 2px; */
 }
 .ratingNumber {
   color: #212121;
-  font-family: Manrope;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -76,10 +73,61 @@
 }
 .userComment P {
   color: #212121;
-  font-family: Manrope;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px; /* 142.857% */
   flex: 1 0 0;
+}
+.userActions {
+  display: inline-block;
+  position: relative;
+}
+.writeReviewContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+.reviewText {
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  display: flex;
+  padding: 0px 32px;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  align-self: flex-start;
+  color: #212121;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+  flex: 1 0 0;
+}
+.editReviewActions {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+.editReviewActions button {
+  background: transparent;
+  border: none;
+  display: flex;
+  padding: 2px 8px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  background: #eaecf1;
+}
+.editReviewActions button div {
+  opacity: 0.8;
+  color: #384149;
+  font-family: Satoshi;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
 }

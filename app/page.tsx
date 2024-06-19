@@ -1,157 +1,127 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Book } from "@/app/interfaces/Book";
+import React, { useState, useEffect,useContext } from "react";
 import SearchBar from "@/app/components/SearchBar/SearchBar";
-import Filters from "@/app/components/Filters/Filters";
 import BookList from "@/app/components/BookList/BookList";
 import styles from "./page.module.css";
-import { getApi, postApi } from "@/app/services/apiService";
-import { ServiceType } from "@/app/constants/baseUrls";
-
+import { useFetchBooks } from "@/app/hooks/useFetchBooks";
+import LoginModal from "./auth/components/LoginModal/LoginModal";
+import SignupModal from "./auth/components/SignupModal/SignupModal";
+import { useAuth } from "@/app/hooks/useAuth";
+import { AuthContext } from "./AuthContext";
 const HomePage: React.FC = () => {
-  const router = useRouter();
-  const [books, setBooks] = useState<Book[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortField, setSortField] = useState("title");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [favoriteLabel, setFavoriteLabel] = useState("Show Favorites");
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+  const [isFavoriteTab, setIsFavoriteTab] = useState(false);
+  const { fetchBooks, error, books } = useFetchBooks({
+    searchQuery,
+    page,
+    limit,
+    isFavoriteTab,
+  });
+  const { authState, login } = useAuth();
 
+  const { triggerBooksFetch } = useContext(AuthContext);
 
   useEffect(() => {
-    // Fetch books from the API based on the current filters and sorting
-    const userToken = localStorage.getItem("userToken");
-    const fetchBooks = async () => {
-      const params = {
-        page,
-        limit,
-        title: searchQuery,
-        sort: sortField,
-        order: sortOrder,
-      };
-
-      let url = `?page=${params.page}&limit=${params.limit}&sort=${params.sort}&order=${params.order}`;
-
-      if (params.title) {
-        url += `&title=${params.title}`;
-      }
-
-      const headers = userToken
-        ? { Authorization: `Bearer ${userToken}` }
-        : undefined;
-
-      try {
-        const response = await getApi(url, headers, ServiceType.BOOKS);
-
-        if (response?.data) {
-          setBooks(response.data);
-        } else {
-          // Handle error scenario
-          console.error("Failed to fetch books:", response.error);
-        }
-      } catch (error) {
-        // Handle network or other errors
-        console.error("An error occurred:", error);
-      }
-    };
-
     fetchBooks();
-  }, [searchQuery, sortField, sortOrder, page, limit]);
+  }, [fetchBooks, triggerBooksFetch]);
+
+  useEffect(() => {
+    if (error) {
+      console.error("Failed to fetch books:", error);
+    }
+  }, [error]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
   const handleFavoritesClick = async () => {
-    const userToken = localStorage.getItem("userToken");
-    if (userToken) {
-      // Fetch favorite books from the API
-      const params = {
-        status: "FAV",
-      };
-      const headers = { Authorization: `Bearer ${userToken}` };
-
-      try {
-        const response = await getApi(
-          `?status=${params.status}`,
-          headers,
-          ServiceType.BOOKS
-        );
-
-        if (response?.data) {
-          setBooks(response.data);
-        } else {
-          // Handle error scenario
-          console.error("Failed to fetch favorite books:", response.error);
-        }
-      } catch (error) {
-        // Handle network or other errors
-        console.error("An error occurred:", error);
+    if (authState.isAuthenticated) {
+      if (favoriteLabel === "Show Favorites") {
+        setIsFavoriteTab(true);
+        await fetchBooks({ status: "FAV" });
+        setFavoriteLabel("Show All");
+      } else {
+        setIsFavoriteTab(false);
+        await fetchBooks();
+        setFavoriteLabel("Show Favorites");
       }
     } else {
-      router.push("/auth/login");
+      openLoginModal();
     }
-  };
-
-  const handleSort = (field: string, order: "asc" | "desc") => {
-    setSortField(field);
-    setSortOrder(order);
   };
 
   const handleFavoriteToggle = async (bookId: string) => {
-    const userToken = localStorage.getItem("userToken");
-    if (userToken) {
-      // Toggle the favorite status of a book
-      const headers = { Authorization: `Bearer ${userToken}` };
-
-      try {
-        await postApi(`/${bookId}/toggle-favorite`, {}, headers, ServiceType.BOOKS);
-
-        // Refetch the books to update the favorite status
-        const params = {
-          page,
-          limit,
-          title: searchQuery,
-          sort: sortField,
-          order: sortOrder,
-        };
-
-        let url = `?page=${params.page}&limit=${params.limit}&sort=${params.sort}&order=${params.order}`;
-
-        if (params.title) {
-          url += `&title=${params.title}`;
-        }
-
-        const response = await getApi(url, headers, ServiceType.BOOKS);
-
-        if (response?.data) {
-          setBooks(response.data);
-        } else {
-          // Handle error scenario
-          console.error("Failed to fetch updated books:", response.error);
-        }
-      } catch (error) {
-        // Handle network or other errors
-        console.error("An error occurred:", error);
-      }
+    if (authState.isAuthenticated) {
+      console.log("toggle favorite");
+      await fetchBooks({ bookId, toggleFavorite: true });
     } else {
-      // Redirect to login/register page
-      router.push("/auth/login");
+      openLoginModal();
     }
+  };
+
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const openSignupModal = () => {
+    setIsLoginModalOpen(false);
+    setIsSignupModalOpen(true);
+  };
+
+  const closeSignupModal = () => {
+    setIsSignupModalOpen(false);
+  };
+
+  const handleLoginSuccess = (userToken: string) => {
+    login(userToken);
+    closeLoginModal();
+  };
+
+  const handleSignupSuccess = (userToken: string) => {
+    login(userToken);
+    closeSignupModal();
   };
 
   return (
     <div className={styles.homePage}>
-      <h1>Book Review App</h1>
       <SearchBar onSearch={handleSearch} />
-      {/* <Filters
-        onFavoritesClick={handleFavoritesClick}
-        onSort={handleSort}
-        onPageChange={(page) => setPage(page)}
-        onLimitChange={(limit) => setLimit(limit)}
-      /> */}
+      <div className={styles.showFavorites}>
+        <div className={styles.divider}></div>
+        <div className={styles.favoritesContainer}>
+          <button
+            onClick={handleFavoritesClick}
+            className={styles.favoriteButton}
+          >
+            <div>{favoriteLabel}</div>
+          </button>
+          <hr className={styles.divider} />
+        </div>
+      </div>
       <BookList books={books} onFavoriteToggle={handleFavoriteToggle} />
+      {isLoginModalOpen && (
+        <LoginModal
+          onClose={closeLoginModal}
+          onLoginSuccess={handleLoginSuccess}
+          openSignupModal={openSignupModal}
+        />
+      )}
+      {isSignupModalOpen && (
+        <SignupModal
+          onClose={closeSignupModal}
+          onSignupSuccess={handleSignupSuccess}
+          openLoginModal={openLoginModal}
+        />
+      )}
     </div>
   );
 };

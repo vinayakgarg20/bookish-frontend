@@ -1,9 +1,11 @@
+// app/layout.tsx
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope } from 'next/font/google';
 import Header from "./components/Header/Header";
 import "./globals.css";
+import { AuthProvider } from './AuthContext';
 
-const inter = Inter({ subsets: ["latin"] });
+const manrope = Manrope({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,11 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div>
+      <body className={manrope.className} style={{ height: "100vh", background: "#FCFCFE", color: "black" }}>
+        <AuthProvider>
           <Header />
           {children}
-        </div>
+        </AuthProvider>
       </body>
     </html>
   );

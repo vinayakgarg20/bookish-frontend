@@ -17,7 +17,6 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-family: Manrope;
   font-size: 40px;
   font-style: normal;
   font-weight: 700;
@@ -35,7 +34,6 @@
   overflow: hidden;
   color: #384149;
   text-overflow: ellipsis;
-  font-family: Manrope;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
@@ -43,7 +41,6 @@
 }
 .bookDescription {
   color: #212121;
-  font-family: Manrope;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

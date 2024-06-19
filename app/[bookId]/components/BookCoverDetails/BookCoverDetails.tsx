@@ -10,8 +10,6 @@ import {
   RatingGraph,
   FiveStarRating,
 } from "@/app/assets/icons/config";
-import Button from "@/app/components/Button/Button";
-import { IconPosition } from "@/app/components/Button/constants/interface";
 
 interface BookCoverDetailsProps {
   book: Book;
@@ -21,6 +19,7 @@ const BookCoverDetails: React.FC<BookCoverDetailsProps> = ({
   book,
   onToggleFavorite,
 }) => {
+  console.log(book.isFavorite, "🚀");
   return (
     <div className={styles.bookCoverParent}>
       <Image
@@ -40,7 +39,7 @@ const BookCoverDetails: React.FC<BookCoverDetailsProps> = ({
         </div>
         <div className={styles.ratingContainerMain}>
           <div className={styles.ratingStars}>
-            <div className={styles.ratingValue}>{book.averageRating}</div>
+            <div className={styles.ratingValue}>{Math.floor(book.averageRating)}</div>
             <div className={styles.ratingStarIcons}>
               <Image
                 src={FiveStarRating}

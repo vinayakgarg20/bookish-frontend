@@ -1,4 +1,5 @@
 import Search from "@/app/assets/icons/search.svg";
+import StarIconEmpty from "@/app/assets/icons/starIconEmpty.svg";
 import FiveStarRating from "@/app/assets/icons/FiveStarRatings.svg";
 import RatingGraph from "@/app/assets/icons/rating-graph.svg";
 import BookCardCover from "@/app/assets/icons/BookCard.svg";
@@ -104,6 +105,7 @@ import DownArrowBgWhite from "@/app/assets/icons/down-arrow-bgwhite.svg";
 import LeftArrow from "@/app/assets/icons/left-arrow.svg";
 export {
   FiveStarRating,
+  StarIconEmpty,
   RatingGraph,
   BookCover,
   Search,

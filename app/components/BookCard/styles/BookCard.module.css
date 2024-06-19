@@ -48,7 +48,6 @@
   overflow: hidden;
   color: #384149;
   text-overflow: ellipsis;
-  font-family: Manrope;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -62,7 +61,6 @@
   overflow: hidden;
   color: #778493;
   text-overflow: ellipsis;
-  font-family: Manrope;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -97,7 +95,6 @@
 }
 .ratingNumber {
   color: #493838;
-  font-family: Manrope;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -105,7 +102,6 @@
 }
 .reviewCount {
   color: #778493;
-  font-family: Manrope;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;

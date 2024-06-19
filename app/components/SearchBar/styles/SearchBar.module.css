@@ -46,7 +46,54 @@
   line-height: 1.1875rem;
   outline: none;
 }
-
+.searchInput {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: rgba(75, 74, 106, 0.6);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.1px;
+}
+.focusedInput {
+  outline: none;
+  text-decoration: none;
+  width: 100%;
+  color: #010101;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.1px;
+}
 .searchBarIcon {
   opacity: 0.5;
+}
+.resultLabel {
+  display: flex;
+  display: flex;
+  padding: 0px 160px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
+.resultLabel p {
+  color: #44444f;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 171.429% */
+  letter-spacing: 0.1px;
+}
+.resultLabel span {
+  color: #44444f;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.1px;
 }

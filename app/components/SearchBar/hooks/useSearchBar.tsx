@@ -11,7 +11,6 @@ export const useSearchBar = () => {
 
   const handleSearch = () => {
     setHeading(true);
-    // Implement your search logic here
   };
 
   return {

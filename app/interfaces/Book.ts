@@ -1,6 +1,4 @@
 import { Review } from "./Review";
-
-// interfaces/Book.ts
 export interface Book {
     _id: string;
     title: string;

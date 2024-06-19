@@ -1,15 +1,20 @@
-import { ServiceType } from "@/app/constants/baseUrls";
+import { ServiceType } from "@/app/utils/baseUrls";
 import { postApi } from "@/app/services/apiService";
 
 export const loginUser = async (username: string, password: string) => {
   try {
-    const response = await postApi('/login', { username, password },ServiceType.AUTH);
+    const response = await postApi(
+      "login",
+      { username, password },
+      undefined,
+      ServiceType.AUTH
+    );
 
     if (response.data) {
       return {
         success: true,
-        token: response.data.token,
-        username: response.data.username,
+        userToken: response.data.token,
+        userName: response.data.username,
       };
     } else {
       return {
@@ -18,10 +23,10 @@ export const loginUser = async (username: string, password: string) => {
       };
     }
   } catch (error) {
-    console.error('Error logging in:', error);
+    console.error("Error logging in:", error);
     return {
       success: false,
-      error: 'An error occurred while logging in.',
+      error: "An error occurred while logging in.",
     };
   }
 };
@@ -32,11 +37,16 @@ export const registerUser = async (
   password: string
 ) => {
   try {
-    const response = await postApi('/auth/register', {
-      email,
-      username,
-      password,
-    });
+    const response = await postApi(
+      "register",
+      {
+        email,
+        username,
+        password,
+      },
+      undefined,
+      ServiceType.AUTH
+    );
 
     if (response.data) {
       return {
@@ -51,10 +61,10 @@ export const registerUser = async (
       };
     }
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error("Error registering user:", error);
     return {
       success: false,
-      error: 'An error occurred while registering user.',
+      error: "An error occurred while registering user.",
     };
   }
 };
