@@ -1,3 +1,5 @@
+# bookish-backend
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 # Book Review Application
@@ -85,13 +87,9 @@ Repository: [book-review-app-backend](https://github.com/vinayakgarg20/bookish-b
 
 This application uses MongoDB Atlas as the online database provider. To set up the database:
 
-1. Sign up for a MongoDB Atlas account at [https://www.mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas).
-
-2. Create a new project and cluster.
-
-3. Obtain the connection string for your cluster.
-
-4. Update the `MONGODB_URI` environment variable in the backend's `.env` file with your MongoDB Atlas connection string.
+1. Update the `MONGODB_URI` environment variable in the backend's `.env` file with your MongoDB Atlas connection string given below.
+2. mongodb+srv://<username>:<password>@bookreviewcluster.asrdiqr.mongodb.net/?retryWrites=true&w=majority&appName=BookReviewCluster
+3. Replace <password> with the password for the <username> user. 
 
 ## Additional Notes
 
