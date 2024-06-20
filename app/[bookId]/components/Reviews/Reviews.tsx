@@ -1,4 +1,3 @@
-// Reviews.tsx
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import ReviewCard from "./Components/ReviewCard/ReviewCard";
@@ -23,7 +22,7 @@ const Reviews: React.FC<ReviewsProps> = ({ bookId }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const { authState, login } = useContext(AuthContext);
-  const { reviews, fetchBookDetails } = useBookDetails(bookId);
+  const {book, reviews, fetchBookDetails } = useBookDetails(bookId);
   const {
     newReview,
     newRating,

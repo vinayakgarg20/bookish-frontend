@@ -1,4 +1,4 @@
-import { getApi } from "@/app/services/apiService";
+import { getApi, showErrorToast } from "@/app/services/apiService";
 import { ServiceType } from "@/app/utils/baseUrls";
 import { AuthStateInterface } from "@/app/auth/context/AuthContext";
 
@@ -20,7 +20,7 @@ export const getBookDetails = async (bookId: string, authState: AuthStateInterfa
       };
     }
   } catch (error) {
-    console.error("Error fetching book details:", error);
+    showErrorToast(`Error fetching book details:  ${error}`);
     return {
       success: false,
       error: "An error occurred while fetching book details.",

@@ -1,4 +1,3 @@
-// useReviews.ts
 import { useState, useCallback, useContext } from "react";
 import { Review } from "@/app/interfaces/Review";
 import { AuthContext } from "@/app/auth/context/AuthContext";
@@ -12,7 +11,7 @@ import { showErrorToast } from "@/app/services/apiService";
 export const useReviews = (bookId: string, fetchBookDetails: () => void) => {
   const [newReview, setNewReview] = useState("");
   const [newRating, setNewRating] = useState(0);
-  const { authState } = useContext(AuthContext);
+  const { authState, updateTriggerBooksFetch } = useContext(AuthContext);
 
   const handleNewReviewChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewReview(e.target.value);
@@ -29,7 +28,12 @@ export const useReviews = (bookId: string, fetchBookDetails: () => void) => {
         comment: newReview,
       };
 
-      const response = await createReview(bookId, newReviewData, authState);
+      const response = await createReview(
+        bookId,
+        newReviewData,
+        authState,
+        updateTriggerBooksFetch
+      );
       if (response.success) {
         fetchBookDetails();
         setNewReview("");
@@ -40,38 +44,57 @@ export const useReviews = (bookId: string, fetchBookDetails: () => void) => {
     } catch (error: any) {
       showErrorToast(error.message);
     }
-  }, [authState, bookId, fetchBookDetails, newRating, newReview]);
+  }, [
+    authState,
+    bookId,
+    fetchBookDetails,
+    newRating,
+    newReview,
+    updateTriggerBooksFetch,
+  ]);
 
-  const handleDeleteReview = useCallback(async (reviewId: string) => {
-    const response = await deleteReview(bookId, reviewId, authState);
-    if (response.success) {
-      fetchBookDetails();
-    } else {
-      showErrorToast(`Failed to delete review: ${response.error}`);
-    }
-  }, [authState, bookId, fetchBookDetails]);
-
-  const handleEditReview = useCallback(async (updatedReview: Review) => {
-    try {
-      const response = await updateReview(
+  const handleDeleteReview = useCallback(
+    async (reviewId: string) => {
+      const response = await deleteReview(
         bookId,
-        updatedReview._id,
-        {
-          rating: updatedReview.rating,
-          comment: updatedReview.comment,
-        },
-        authState
+        reviewId,
+        authState,
+        updateTriggerBooksFetch
       );
-
       if (response.success) {
         fetchBookDetails();
       } else {
-        showErrorToast(response.error);
+        showErrorToast(`Failed to delete review: ${response.error}`);
       }
-    } catch (error: any) {
-      showErrorToast(error.message);
-    }
-  }, [authState, bookId, fetchBookDetails]);
+    },
+    [authState, bookId, fetchBookDetails, updateTriggerBooksFetch]
+  );
+
+  const handleEditReview = useCallback(
+    async (updatedReview: Review) => {
+      try {
+        const response = await updateReview(
+          bookId,
+          updatedReview._id,
+          {
+            rating: updatedReview.rating,
+            comment: updatedReview.comment,
+          },
+          authState,
+          updateTriggerBooksFetch
+        );
+
+        if (response.success) {
+          fetchBookDetails();
+        } else {
+          showErrorToast(response.error);
+        }
+      } catch (error: any) {
+        showErrorToast(error.message);
+      }
+    },
+    [authState, bookId, fetchBookDetails, updateTriggerBooksFetch]
+  );
 
   return {
     newReview,

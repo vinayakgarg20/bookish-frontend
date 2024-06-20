@@ -14,15 +14,6 @@ const BookList: React.FC<BookListProps> = ({ books, onFavoriteToggle }) => {
       {books.map((book) => (
         <BookCard key={book._id} book={book} onFavoriteToggle={onFavoriteToggle} />
       ))}
-      {books.map((book) => (
-        <BookCard key={book._id} book={book} onFavoriteToggle={onFavoriteToggle} />
-      ))}
-      {books.map((book) => (
-        <BookCard key={book._id} book={book} onFavoriteToggle={onFavoriteToggle} />
-      ))}
-      {books.map((book) => (
-        <BookCard key={book._id} book={book} onFavoriteToggle={onFavoriteToggle} />
-      ))}
     </div>
   );
 };

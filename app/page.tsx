@@ -9,6 +9,7 @@ import SignUpModal from "@/app/auth/SignupModal/SignupModal";
 import { AuthContext } from "@/app/auth/context/AuthContext";
 
 import { showErrorToast } from "./services/apiService";
+
 const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -21,14 +22,14 @@ const HomePage: React.FC = () => {
     searchQuery,
     page,
     limit,
-    isFavoriteTab,
+    isFavoriteTab: isFavoriteTab,
   });
-  const { authState,login,logout } = useContext(AuthContext);
-
+  const { authState, login, logout } = useContext(AuthContext);
 
   useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks, authState]);
+    fetchBooks({ isFavoriteTab: isFavoriteTab });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authState, searchQuery]);
 
   useEffect(() => {
     if (error) {
@@ -42,15 +43,10 @@ const HomePage: React.FC = () => {
 
   const handleFavoritesClick = async () => {
     if (authState.isAuthenticated) {
-      if (favoriteLabel === "Show Favorites") {
-        setIsFavoriteTab(true);
-        await fetchBooks({ status: "FAV" });
-        setFavoriteLabel("Show All");
-      } else {
-        setIsFavoriteTab(false);
-        await fetchBooks();
-        setFavoriteLabel("Show Favorites");
-      }
+      const newIsFavoriteTab = !isFavoriteTab;
+      setIsFavoriteTab(newIsFavoriteTab);
+      fetchBooks({ isFavoriteTab: newIsFavoriteTab });
+      setFavoriteLabel(newIsFavoriteTab ? "Show All" : "Show Favorites");
     } else {
       openLoginModal();
     }

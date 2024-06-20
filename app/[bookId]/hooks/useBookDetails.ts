@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from "react";
+import { useState, useCallback, useContext, useEffect } from "react";
 import { Book } from "@/app/interfaces/Book";
 import { getBookDetails } from "@/app/[bookId]/services/bookService";
 import { AuthContext } from "@/app/auth/context/AuthContext";
@@ -6,10 +6,10 @@ import { Review } from "@/app/interfaces/Review";
 
 export const useBookDetails = (bookId: string) => {
   const [book, setBook] = useState<Book | null>(null);
-  const [reviews,setReviews]=useState<Review[]|null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { authState } = useContext(AuthContext);
+  const [reviews,setReviews]=useState<Review[]|null>(null);
+  const { authState, triggerBooksFetch } = useContext(AuthContext);
 
   const fetchBookDetails = useCallback(async () => {
     setIsLoading(true);
@@ -19,7 +19,7 @@ export const useBookDetails = (bookId: string) => {
       const response = await getBookDetails(bookId, authState);
       if (response.success) {
         setBook(response.book);
-        setReviews(response.book?.reviews);
+        setReviews(response?.book?.reviews);
       } else {
         setError(response.error);
       }
@@ -29,6 +29,10 @@ export const useBookDetails = (bookId: string) => {
       setIsLoading(false);
     }
   }, [bookId, authState]);
-  
-  return { book, reviews,isLoading, error, fetchBookDetails };
+
+  useEffect(() => {
+    fetchBookDetails();
+  }, [fetchBookDetails, triggerBooksFetch]);
+
+  return { book, isLoading, error, fetchBookDetails,reviews };
 };

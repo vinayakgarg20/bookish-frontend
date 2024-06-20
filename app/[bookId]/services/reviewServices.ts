@@ -6,6 +6,7 @@ export const createReview = async (
   bookId: string,
   review: { rating: number; comment?: string },
   authState: AuthStateInterface,
+  updateTriggerBooksFetch: () => void
 ) => {
   try {
     const userToken = authState.userToken;
@@ -17,6 +18,7 @@ export const createReview = async (
       ServiceType.BOOKS
     );
     if (response.data) {
+      updateTriggerBooksFetch();
       return {
         success: true,
         review: response.data,
@@ -40,7 +42,8 @@ export const updateReview = async (
   bookId: string,
   reviewId: string,
   updatedReview: { rating?: number; comment?: string },
-  authState: AuthStateInterface
+  authState: AuthStateInterface,
+  updateTriggerBooksFetch: () => void
 ) => {
   try {
     const userToken = authState.userToken;
@@ -54,6 +57,7 @@ export const updateReview = async (
       ServiceType.BOOKS
     );
     if (response.data) {
+      updateTriggerBooksFetch();
       return {
         success: true,
         review: response.data,
@@ -73,7 +77,7 @@ export const updateReview = async (
   }
 };
 
-export const deleteReview = async (bookId: string, reviewId: string, authState: AuthStateInterface) => {
+export const deleteReview = async (bookId: string, reviewId: string, authState: AuthStateInterface,updateTriggerBooksFetch: () => void) => {
   try {
     const userToken = authState.userToken;
     const headers = userToken
@@ -86,6 +90,7 @@ export const deleteReview = async (bookId: string, reviewId: string, authState: 
       headers
     );
     if (response?.data) {
+      updateTriggerBooksFetch();
       return {
         success: true,
       };

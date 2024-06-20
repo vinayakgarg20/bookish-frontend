@@ -21,16 +21,16 @@ const BookCoverDetails: React.FC<BookCoverDetailsProps> = ({
   bookId,
   onToggleFavorite,
 }) => {
-  const { book, reviews, fetchBookDetails } = useBookDetails(bookId);
-  const { authState, login, logout } = useContext(AuthContext);
+  const { book, fetchBookDetails } = useBookDetails(bookId);
+  const { authState, updateTriggerBooksFetch } = useContext(AuthContext);
 
   useEffect(() => {
     fetchBookDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authState, bookId, book]);
+  }, [authState, bookId, updateTriggerBooksFetch]);
 
   const renderStarIcons = () => {
-    const averageRating = Math.floor(book?.averageRating ? book.averageRating : 0);
+    const averageRating = Math.floor(book?.averageRating || 0);
     return Array.from({ length: 5 }, (_, index) => (
       <div className={styles.ratingIcon} key={index}>
         <Image
@@ -46,55 +46,58 @@ const BookCoverDetails: React.FC<BookCoverDetailsProps> = ({
 
   return (
     <div className={styles.bookCoverParent}>
-      <Image
-        className={styles.imageIcon}
-        width={300}
-        height={400}
-        loading="lazy"
-        alt=""
-        src={BookCover}
-      />
-      <div className={styles.ratingContainer}>
-        <div className={styles.ratingLabels}>
-          <div className={styles.ratingText}>Ratings</div>
-          <div className={styles.ratingCount}>
-            from {book?.reviews ? `${book.reviews.length} reviews` : `0 review`}{" "}
-          </div>
-        </div>
-        <div className={styles.ratingContainerMain}>
-          <div className={styles.ratingStars}>
-            <div className={styles.ratingValue}>
-              {Math.floor(book?.averageRating ? book.averageRating : 0)}
+      <div className={styles.bookCoverParent}>
+        <Image
+          className={styles.imageIcon}
+          width={300}
+          height={400}
+          loading="lazy"
+          alt=""
+          src={BookCover}
+        />
+        <div className={styles.ratingContainer}>
+          <div className={styles.ratingLabels}>
+            <div className={styles.ratingText}>Ratings</div>
+            <div className={styles.ratingCount}>
+              from{" "}
+              {book?.reviews ? `${book.reviews.length} reviews` : `0 review`}{" "}
             </div>
-            <div className={styles.ratingStarIcons}>{renderStarIcons()}</div>
           </div>
-          <div className={styles.ratingGraph}>
-            {" "}
+          <div className={styles.ratingContainerMain}>
+            <div className={styles.ratingStars}>
+              <div className={styles.ratingValue}>
+                {Math.floor(book?.averageRating || 0)}
+              </div>
+              <div className={styles.ratingStarIcons}>{renderStarIcons()}</div>
+            </div>
+            <div className={styles.ratingGraph}>
+              {" "}
+              <Image
+                src={RatingGraph}
+                alt="rating graph"
+                width={160}
+                height={80}
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          className={styles.buttonContainerOuter}
+          onClick={onToggleFavorite}
+        >
+          <div className={styles.buttonContainerInner}>
             <Image
-              src={RatingGraph}
-              alt="rating graph"
-              width={160}
-              height={80}
+              width={19.5}
+              height={19.5}
+              alt=""
+              src={book?.isFavorite ? FavoriteIconFilled : FavoriteIcon}
             />
+            <div className={styles.addToFavorites}>
+              {book?.isFavorite ? "Remove from favorites" : "Add to favorites"}
+            </div>
           </div>
-        </div>
+        </button>
       </div>
-      <button
-        className={styles.buttonContainerOuter}
-        onClick={onToggleFavorite}
-      >
-        <div className={styles.buttonContainerInner}>
-          <Image
-            width={19.5}
-            height={19.5}
-            alt=""
-            src={book?.isFavorite ? FavoriteIconFilled : FavoriteIcon}
-          />
-          <div className={styles.addToFavorites}>
-            {book?.isFavorite ? "Remove from favorites" : "Add to favorites"}
-          </div>
-        </div>
-      </button>
     </div>
   );
 };

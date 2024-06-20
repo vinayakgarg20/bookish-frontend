@@ -10,10 +10,14 @@ interface AuthContextValue {
   authState: AuthStateInterface;
   login: () => void;
   logout: () => void;
+  triggerBooksFetch: number,
+  updateTriggerBooksFetch: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   authState: { isAuthenticated: false, userToken: null, userName: null },
+  triggerBooksFetch: 0,
+  updateTriggerBooksFetch: () => {},
   login: () => {},
   logout: () => {},
 });
@@ -28,7 +32,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     userToken: null,
     userName: null,
   });
-  const [, setTrigger] = useState(false);
+  const [triggerBooksFetch, setTriggerBooksFetch] = useState(0);
+
+  const updateTriggerBooksFetch = () => {
+    setTriggerBooksFetch((prevTrigger) => prevTrigger + 1);
+  };
 
   useEffect(() => {
     const userToken = localStorage.getItem("userToken");
@@ -54,7 +62,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ authState, login, logout }}
+      value={{ authState, login, logout ,triggerBooksFetch,updateTriggerBooksFetch}}
     >
       {children}
     </AuthContext.Provider>

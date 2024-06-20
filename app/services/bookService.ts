@@ -30,12 +30,11 @@ export const getBooks = async (
   if (searchQuery) {
     url += `&search=${searchQuery}`;
   }
-  if (status || isFavoriteTab===true) {
+  if (isFavoriteTab) {
     url += `&status=FAV`;
   } 
   try {
     const response = await getApi(url, headers, ServiceType.BOOKS);
-
     if (response?.data) {
       return { success: true, books: response.data };
     } else {

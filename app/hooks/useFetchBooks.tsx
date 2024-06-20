@@ -15,7 +15,7 @@ interface FetchBooksProps {
 }
 
 export const useFetchBooks = ({
-  searchQuery = "",
+  searchQuery,
   page = 1,
   limit = 10,
   status,
@@ -36,7 +36,7 @@ export const useFetchBooks = ({
         page: options.page || page,
         limit: options.limit || limit,
         status: options.status,
-        isFavoriteTab: isFavoriteTab,
+        isFavoriteTab: options.isFavoriteTab,
       };
       try {
         let fetchedBooks: Book[] = [];
