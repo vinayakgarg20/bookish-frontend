@@ -1,8 +1,14 @@
+# bookish-backend
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 # Book Review Application
 
 This is a full stack web application for book reviews built with Next.js, TypeScript, Express.js, Node.js, and MongoDB. The application consists of two separate repositories for the frontend and backend.
+
+## API Schema and dummy data (Notion Documentation)
+
+I've created an API documentation at notion, which includes API schema and seed data information. (https://marbled-clef-9c0.notion.site/Book-Review-Application-API-Template-dummy-data-2aafbf3043ea47998fdda360ce3ec0f8)
 
 ## Frontend Repository
 
@@ -85,13 +91,15 @@ Repository: [book-review-app-backend](https://github.com/vinayakgarg20/bookish-b
 
 This application uses MongoDB Atlas as the online database provider. To set up the database:
 
-1. Sign up for a MongoDB Atlas account at [https://www.mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas).
+ Update the `MONGODB_URI` environment variable in the backend's `.env` file with your MongoDB Atlas connection string given below.
 
-2. Create a new project and cluster.
-
-3. Obtain the connection string for your cluster.
-
-4. Update the `MONGODB_URI` environment variable in the backend's `.env` file with your MongoDB Atlas connection string.
+```
+mongodb+srv://<username>:<password>@bookreviewcluster.asrdiqr.mongodb.net/?retryWrites=true&w=majority&appName=BookReviewCluster
+```
+Replace <password> with the password for the <username> user.
+```
+ testing credentials : { username: testingUser , password: hRLyBokLQpXhD8Hr}
+```
 
 ## Additional Notes
 
