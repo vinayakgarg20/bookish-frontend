@@ -1,7 +1,7 @@
 import { getApi, postApi } from "./apiService";
 import { ServiceType } from "@/app/utils/baseUrls";
 import { Book } from "@/app/interfaces/Book";
-
+import { AuthStateInterface } from "../auth/context/AuthContext";
 interface GetBooksParams {
   searchQuery?: string;
   page?: number;
@@ -17,10 +17,11 @@ interface BookServiceResponse {
 }
 
 export const getBooks = async (
-  params: GetBooksParams
+  params: GetBooksParams,
+  authState:AuthStateInterface
 ): Promise<BookServiceResponse> => {
   const { searchQuery, page, limit, status,isFavoriteTab } = params;
-  const userToken = localStorage.getItem("userToken");
+  const userToken = authState.userToken;
   const headers = userToken
     ? { Authorization: `Bearer ${userToken}` }
     : undefined;
@@ -29,16 +30,13 @@ export const getBooks = async (
   if (searchQuery) {
     url += `&search=${searchQuery}`;
   }
-  console.log(params,"🥲✅");
   if (status || isFavoriteTab===true) {
     url += `&status=FAV`;
   } 
-  console.log(url,params.isFavoriteTab,"showURLLLLLLLLL");
   try {
     const response = await getApi(url, headers, ServiceType.BOOKS);
 
     if (response?.data) {
-      console.log(response.data,"bokss!!!")
       return { success: true, books: response.data };
     } else {
       return {
@@ -52,10 +50,11 @@ export const getBooks = async (
 };
 
 export const toggleFavorite = async (
-  bookId: string
+  bookId: string,
+  authState:AuthStateInterface
 ): Promise<BookServiceResponse> => {
   try {
-    const userToken = localStorage.getItem("userToken");
+    const userToken = authState.userToken;
     const headers = userToken
       ? { Authorization: `Bearer ${userToken}` }
       : undefined;

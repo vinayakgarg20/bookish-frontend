@@ -1,17 +1,21 @@
-// components/LoginModal.tsx
-import React, { useState } from 'react';
-import styles from '../../styles/auth.module.css';
-import { loginUser } from '../../services/authService';
+import React, { useState } from "react";
+import styles from "../styles/auth.module.css";
+import { loginUser } from "../services/authService";
+import { showErrorToast } from "@/app/services/apiService";
 
 interface LoginModalProps {
   onClose: () => void;
-  onLoginSuccess: (userToken:string) => void;
-  openSignupModal: () => void;
+  onLoginSuccess: () => void;
+  openSignUpModal: () => void;
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess, openSignupModal }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const LoginModal: React.FC<LoginModalProps> = ({
+  onClose,
+  onLoginSuccess,
+  openSignUpModal,
+}) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,14 +23,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess, openSi
     try {
       const response = await loginUser(username, password);
       if (response.success) {
-        localStorage.setItem('userToken', response.userToken);
-        localStorage.setItem('userName', response.userName);
-        onLoginSuccess(response.userToken);
+        localStorage.setItem("userToken", response.userToken);
+        localStorage.setItem("userName", response.userName);
+        onLoginSuccess();
       } else {
-        console.error(response.error);
+        showErrorToast(response.error);
       }
-    } catch (error) {
-      console.error('Error logging in:', error);
+    } catch (error: any) {
+      showErrorToast(`Error logging in: ${error}`);
     }
   };
 
@@ -55,12 +59,19 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess, openSi
               required
             />
           </div>
-          <button type="submit" className={styles.modalButton}>Login</button>
+          <button type="submit" className={styles.modalButton}>
+            Login
+          </button>
         </form>
         <p className={styles.modalText}>
-          Don&apos;t have an account? <a href="#" onClick={openSignupModal}>Sign up</a>
+          Don&apos;t have an account?{" "}
+          <a href="#" onClick={openSignUpModal}>
+            Sign up
+          </a>
         </p>
-        <button onClick={onClose} className={styles.modalCloseButton}>Close</button>
+        <button onClick={onClose} className={styles.modalCloseButton}>
+          Close
+        </button>
       </div>
     </div>
   );

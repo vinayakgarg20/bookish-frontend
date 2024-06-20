@@ -1,30 +1,31 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import styles from "@/app/components/Header/styles/Header.module.css";
-import {
-  BookishLogo,
-  DropDownIcon,
-  DropDownIconDown,
-  UserProfile,
-} from "@/app/assets/icons/config";
-import { useHeader } from "@/app/components/Header/hooks/useHeader";
-import { useAuth } from "@/app/hooks/useAuth";
-import LoginModal from "@/app/auth/components/LoginModal/LoginModal";
-import SignupModal from "@/app/auth/components/SignupModal/SignupModal";
+import { BookishLogo, UserProfile } from "@/app/assets/icons/config";
+import { AuthContext } from "@/app/auth/context/AuthContext";
+
+import LoginModal from "@/app/auth/LoginModal/LoginModal";
+import SignUpModal from "@/app/auth/SignupModal/SignupModal";
 
 const Header = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  const { authState, login, logout } = useAuth();
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const [userName, setUserName] = useState("");
+  const { authState, login, logout } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (authState.userName) {
+      setUserName(authState.userName);
+    }
+  }, [authState]);
   const handleLogin = () => {
     openLoginModal();
-
   };
   const handleLogout = () => {
     logout();
   };
-  
+
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
   };
@@ -33,23 +34,23 @@ const Header = () => {
     setIsLoginModalOpen(false);
   };
 
-  const openSignupModal = () => {
+  const openSignUpModal = () => {
     setIsLoginModalOpen(false);
-    setIsSignupModalOpen(true);
+    setIsSignUpModalOpen(true);
   };
 
-  const closeSignupModal = () => {
-    setIsSignupModalOpen(false);
+  const closeSignUpModal = () => {
+    setIsSignUpModalOpen(false);
   };
 
-  const handleLoginSuccess = (userToken: string) => {
-    login(userToken);
+  const handleLoginSuccess = () => {
+    login();
     closeLoginModal();
   };
 
-  const handleSignupSuccess = (userToken: string) => {
-    login(userToken);
-    closeSignupModal();
+  const handleSignUpSuccess = () => {
+    login();
+    closeSignUpModal();
   };
   return (
     <>
@@ -67,12 +68,7 @@ const Header = () => {
                 alt="User Profile"
               ></Image>
               <div className={styles.userInfo}>
-                <p className={styles.userName}>
-                  {localStorage.getItem("userName")}
-                </p>
-              </div>
-              <div className={styles.dropdown}>
-                <Image src={DropDownIconDown} alt=""></Image>
+                <p className={styles.userName}>{userName}</p>
               </div>
             </div>
             <div className={styles.loginContainer} onClick={handleLogout}>
@@ -96,17 +92,17 @@ const Header = () => {
           </div>
         </header>
       )}
-       {isLoginModalOpen && (
+      {isLoginModalOpen && (
         <LoginModal
           onClose={closeLoginModal}
           onLoginSuccess={handleLoginSuccess}
-          openSignupModal={openSignupModal}
+          openSignUpModal={openSignUpModal}
         />
       )}
-      {isSignupModalOpen && (
-        <SignupModal
-          onClose={closeSignupModal}
-          onSignupSuccess={handleSignupSuccess}
+      {isSignUpModalOpen && (
+        <SignUpModal
+          onClose={closeSignUpModal}
+          onSignUpSuccess={handleSignUpSuccess}
           openLoginModal={openLoginModal}
         />
       )}

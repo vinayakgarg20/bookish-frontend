@@ -1,20 +1,21 @@
 "use client";
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import SearchBar from "@/app/components/SearchBar/SearchBar";
 import BookList from "@/app/components/BookList/BookList";
 import styles from "./page.module.css";
 import { useFetchBooks } from "@/app/hooks/useFetchBooks";
-import LoginModal from "./auth/components/LoginModal/LoginModal";
-import SignupModal from "./auth/components/SignupModal/SignupModal";
-import { useAuth } from "@/app/hooks/useAuth";
-import { AuthContext } from "./AuthContext";
+import LoginModal from "@/app/auth/LoginModal/LoginModal";
+import SignUpModal from "@/app/auth/SignupModal/SignupModal";
+import { AuthContext } from "@/app/auth/context/AuthContext";
+
+import { showErrorToast } from "./services/apiService";
 const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [favoriteLabel, setFavoriteLabel] = useState("Show Favorites");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isFavoriteTab, setIsFavoriteTab] = useState(false);
   const { fetchBooks, error, books } = useFetchBooks({
     searchQuery,
@@ -22,17 +23,16 @@ const HomePage: React.FC = () => {
     limit,
     isFavoriteTab,
   });
-  const { authState, login } = useAuth();
+  const { authState,login,logout } = useContext(AuthContext);
 
-  const { triggerBooksFetch } = useContext(AuthContext);
 
   useEffect(() => {
     fetchBooks();
-  }, [fetchBooks, triggerBooksFetch]);
+  }, [fetchBooks, authState]);
 
   useEffect(() => {
     if (error) {
-      console.error("Failed to fetch books:", error);
+      showErrorToast(error);
     }
   }, [error]);
 
@@ -58,7 +58,6 @@ const HomePage: React.FC = () => {
 
   const handleFavoriteToggle = async (bookId: string) => {
     if (authState.isAuthenticated) {
-      console.log("toggle favorite");
       await fetchBooks({ bookId, toggleFavorite: true });
     } else {
       openLoginModal();
@@ -73,23 +72,23 @@ const HomePage: React.FC = () => {
     setIsLoginModalOpen(false);
   };
 
-  const openSignupModal = () => {
+  const openSignUpModal = () => {
     setIsLoginModalOpen(false);
-    setIsSignupModalOpen(true);
+    setIsSignUpModalOpen(true);
   };
 
-  const closeSignupModal = () => {
-    setIsSignupModalOpen(false);
+  const closeSignUpModal = () => {
+    setIsSignUpModalOpen(false);
   };
 
-  const handleLoginSuccess = (userToken: string) => {
-    login(userToken);
+  const handleLoginSuccess = () => {
+    login();
     closeLoginModal();
   };
 
-  const handleSignupSuccess = (userToken: string) => {
-    login(userToken);
-    closeSignupModal();
+  const handleSignUpSuccess = () => {
+    login();
+    closeSignUpModal();
   };
 
   return (
@@ -112,13 +111,13 @@ const HomePage: React.FC = () => {
         <LoginModal
           onClose={closeLoginModal}
           onLoginSuccess={handleLoginSuccess}
-          openSignupModal={openSignupModal}
+          openSignUpModal={openSignUpModal}
         />
       )}
-      {isSignupModalOpen && (
-        <SignupModal
-          onClose={closeSignupModal}
-          onSignupSuccess={handleSignupSuccess}
+      {isSignUpModalOpen && (
+        <SignUpModal
+          onClose={closeSignUpModal}
+          onSignUpSuccess={handleSignUpSuccess}
           openLoginModal={openLoginModal}
         />
       )}

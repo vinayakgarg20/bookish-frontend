@@ -9,6 +9,7 @@ import {
   YellowStarIcon,
 } from "@/app/assets/icons/config";
 import ReviewActions from "../ReviewActions/ReviewActions";
+import { formatDate } from '../../../../../utils/getDate';
 
 interface ReviewCardProps {
   review: Review;
@@ -88,11 +89,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             <Image src={UserIcon} alt="User Icon" width={24} height={24} />
             <span className={styles.username}>{review.username}</span>
             <div className={styles.divider}>
-              <Image src={DividerIcon} alt="Divider" width={16} height={16} />
+              <Image src={DividerIcon} alt="Divider" width={6} height={6} />
             </div>
-            <span className={styles.date}>{review.createdAt}</span>
+            <span className={styles.date}>{formatDate(review.createdAt)}</span>
             <div className={styles.divider}>
-              <Image src={DividerIcon} alt="Divider" width={16} height={16} />
+              <Image src={DividerIcon} alt="Divider" width={6} height={6} />
             </div>
             <div className={styles.rating}>
               <div className={styles.ratingIcon}>

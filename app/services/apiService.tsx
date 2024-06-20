@@ -1,8 +1,11 @@
 import { toast } from "react-toastify";
 import { ApiType, BaseUrls, ContentTypes, ServiceType } from "@/app/utils/baseUrls";
 
+
 export const showErrorToast = (message?: string) => {
-  toast.error(message || "Something went wrong");
+  toast.error(message || "Something went wrong", {
+    autoClose: 3000,
+  });
 };
 
 export const handleApiResponse = async (response: Response) => {

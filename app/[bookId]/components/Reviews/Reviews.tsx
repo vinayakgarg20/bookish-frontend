@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Review } from "@/app/interfaces/Review";
+// Reviews.tsx
+"use client";
+import React, { useContext, useEffect, useState } from "react";
 import ReviewCard from "./Components/ReviewCard/ReviewCard";
 import styles from "./styles/Reviews.module.css";
 import Image from "next/image";
@@ -8,75 +9,35 @@ import {
   UserProfile,
   YellowStarIcon,
 } from "@/app/assets/icons/config";
-import { useRouter } from "next/navigation";
-import {
-  createReview,
-  updateReview,
-  deleteReview,
-} from "@/app/[bookId]/components/Reviews/services/reviewServices";
-import { showErrorToast } from "@/app/services/apiService";
-import { useAuth } from "@/app/hooks/useAuth";
-import LoginModal from "@/app/auth/components/LoginModal/LoginModal";
-import SignupModal from "@/app/auth/components/SignupModal/SignupModal";
+import { AuthContext } from "@/app/auth/context/AuthContext";
+import LoginModal from "@/app/auth/LoginModal/LoginModal";
+import SignUpModal from "@/app/auth/SignupModal/SignupModal";
+import { useBookDetails } from "../../hooks/useBookDetails";
+import { useReviews } from "@/app/[bookId]/components/Reviews/hooks/useReviews";
 
 interface ReviewsProps {
   bookId: string;
-  reviews: Review[];
-  onReviewsUpdated: (reviews: Review[]) => void;
-  isAuthenticated: boolean;
 }
 
-const Reviews: React.FC<ReviewsProps> = ({
-  bookId,
-  reviews,
-  onReviewsUpdated,
-  isAuthenticated,
-}) => {
-  const router = useRouter();
-  const [newReview, setNewReview] = useState("");
-  const [newRating, setNewRating] = useState(0);
-  const [updatedReviews, setUpdatedReviews] = useState<Review[]>(reviews);
+const Reviews: React.FC<ReviewsProps> = ({ bookId }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  const { authState, login } = useAuth();
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const { authState, login } = useContext(AuthContext);
+  const { reviews, fetchBookDetails } = useBookDetails(bookId);
+  const {
+    newReview,
+    newRating,
+    handleNewReviewChange,
+    handleNewRatingChange,
+    handleCreateReview,
+    handleDeleteReview,
+    handleEditReview,
+  } = useReviews(bookId, fetchBookDetails);
+  useEffect(() => {
+    fetchBookDetails();
 
-  const handleWriteReview = () => {
-    if (authState) {
-      console.log("Opening write review modal");
-    } else {
-      openLoginModal();
-    }
-  };
-
-  const handleNewReviewChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNewReview(e.target.value);
-  };
-
-  const handleNewRatingChange = (rating: number) => {
-    setNewRating(rating);
-  };
-  const handleCreateReview = async () => {
-    if (authState) {
-      try {
-        const newReviewData = {
-          rating: newRating,
-          comment: newReview,
-        };
-
-        const response = await createReview(bookId, newReviewData);
-
-        if (response.success && response.bookDetails) {
-          setUpdatedReviews(response.bookDetails.reviews);
-        } else {
-          showErrorToast(response.error);
-        }
-      } catch (error: any) {
-        showErrorToast(error.message);
-      }
-    } else {
-      openLoginModal();
-    }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bookId, authState]);
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
   };
@@ -85,66 +46,44 @@ const Reviews: React.FC<ReviewsProps> = ({
     setIsLoginModalOpen(false);
   };
 
-  const openSignupModal = () => {
+  const openSignUpModal = () => {
     setIsLoginModalOpen(false);
-    setIsSignupModalOpen(true);
+    setIsSignUpModalOpen(true);
   };
 
-  const closeSignupModal = () => {
-    setIsSignupModalOpen(false);
+  const closeSignUpModal = () => {
+    setIsSignUpModalOpen(false);
   };
 
-  const handleLoginSuccess = (userToken: string) => {
-    login(userToken);
+  const handleLoginSuccess = () => {
+    login();
     closeLoginModal();
   };
 
-  const handleSignupSuccess = (userToken: string) => {
-    login(userToken);
-    closeSignupModal();
+  const handleSignUpSuccess = () => {
+    login();
+    closeSignUpModal();
   };
-  const handleDeleteReview = async (reviewId: string) => {
-    const response = await deleteReview(bookId, reviewId);
-    if (response.success && response.bookDetails) {
-      setUpdatedReviews(response.bookDetails.reviews);
+
+  const handleSubmitReview = () => {
+    if (authState.isAuthenticated) {
+      handleCreateReview();
     } else {
-      console.error("Failed to delete review:", response.error);
+      openLoginModal();
     }
   };
 
-  const handleEditReview = async (updatedReview: Review) => {
-    try {
-      const response = await updateReview(bookId, updatedReview._id, {
-        rating: updatedReview.rating,
-        comment: updatedReview.comment,
-      });
-
-      if (response.success && response.bookDetails) {
-        setUpdatedReviews(response.bookDetails.reviews);
-      } else {
-        showErrorToast(response.error);
-      }
-    } catch (error: any) {
-      showErrorToast(error.message);
-    }
-  };
-  console.log(updatedReviews, "updatedReviews");
   return (
     <div className={styles.container}>
       <div className={styles.reviewsParent}>
         <div className={styles.reviews}>Reviews</div>
-        <div className={styles.reviewPlaceholder}>
-          {" "}
-          ({updatedReviews ? updatedReviews.length : 0})
-        </div>
+        <div className={styles.reviewPlaceholder}> ({reviews?.length})</div>
       </div>
-      {authState ? (
+      {authState.isAuthenticated ? (
         <div className={styles.writeReviewButton}>
           <div className={styles.userInfo}>
             <Image src={UserProfile} alt="User Icon" width={24} height={24} />
-            <div className={styles.username}>
-              {localStorage.getItem("userName")}
-            </div>
+            <div className={styles.username}>{authState.userName}</div>
             <div className={styles.giveRating}>
               {Array.from({ length: 5 }, (_, index) => (
                 <div className={styles.ratingIcon} key={index}>
@@ -170,7 +109,7 @@ const Reviews: React.FC<ReviewsProps> = ({
             />
             <button
               className={styles.submitButton}
-              onClick={handleCreateReview}
+              onClick={handleSubmitReview}
             >
               <div>Submit</div>
             </button>
@@ -179,7 +118,7 @@ const Reviews: React.FC<ReviewsProps> = ({
       ) : (
         <button
           className={styles.writeReviewButton}
-          onClick={handleWriteReview}
+          onClick={handleSubmitReview}
         >
           <div className={styles.writeReviewInner}>
             <p className={styles.reviewText}> Write your review here</p>
@@ -187,8 +126,8 @@ const Reviews: React.FC<ReviewsProps> = ({
         </button>
       )}
       <div className={styles.reviewCardParent}>
-        {updatedReviews.length > 0 ? (
-          updatedReviews.map((review) => (
+        {reviews ? (
+          reviews.map((review) => (
             <ReviewCard
               key={review._id}
               review={review}
@@ -204,13 +143,13 @@ const Reviews: React.FC<ReviewsProps> = ({
         <LoginModal
           onClose={closeLoginModal}
           onLoginSuccess={handleLoginSuccess}
-          openSignupModal={openSignupModal}
+          openSignUpModal={openSignUpModal}
         />
       )}
-      {isSignupModalOpen && (
-        <SignupModal
-          onClose={closeSignupModal}
-          onSignupSuccess={handleSignupSuccess}
+      {isSignUpModalOpen && (
+        <SignUpModal
+          onClose={closeSignUpModal}
+          onSignUpSuccess={handleSignUpSuccess}
           openLoginModal={openLoginModal}
         />
       )}

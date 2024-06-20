@@ -1,5 +1,5 @@
 import { ServiceType } from "@/app/utils/baseUrls";
-import { postApi } from "@/app/services/apiService";
+import { postApi, showErrorToast } from "@/app/services/apiService";
 
 export const loginUser = async (username: string, password: string) => {
   try {
@@ -23,7 +23,7 @@ export const loginUser = async (username: string, password: string) => {
       };
     }
   } catch (error) {
-    console.error("Error logging in:", error);
+    showErrorToast(`Error logging in: ${error}`);
     return {
       success: false,
       error: "An error occurred while logging in.",
@@ -61,7 +61,7 @@ export const registerUser = async (
       };
     }
   } catch (error) {
-    console.error("Error registering user:", error);
+    showErrorToast(`Error registering user: ${error}`);
     return {
       success: false,
       error: "An error occurred while registering user.",

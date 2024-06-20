@@ -1,25 +1,49 @@
-import React from "react";
-// import RatingComponent from "./rating-component";
+import React, { useContext, useEffect } from "react";
 import styles from "./styles/BookCoverDetails.module.css";
 import Image from "next/image";
-import { Book } from "@/app/interfaces/Book";
 import {
   FavoriteIconFilled,
   FavoriteIcon,
   BookCover,
   RatingGraph,
-  FiveStarRating,
+  YellowStarIcon,
+  StarIconEmpty,
 } from "@/app/assets/icons/config";
+import { useBookDetails } from "../../hooks/useBookDetails";
+import { AuthContext } from "@/app/auth/context/AuthContext";
 
 interface BookCoverDetailsProps {
-  book: Book;
+  bookId: string;
   onToggleFavorite: () => void;
 }
+
 const BookCoverDetails: React.FC<BookCoverDetailsProps> = ({
-  book,
+  bookId,
   onToggleFavorite,
 }) => {
-  console.log(book.isFavorite, "🚀");
+  const { book, reviews, fetchBookDetails } = useBookDetails(bookId);
+  const { authState, login, logout } = useContext(AuthContext);
+
+  useEffect(() => {
+    fetchBookDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authState, bookId, book]);
+
+  const renderStarIcons = () => {
+    const averageRating = Math.floor(book?.averageRating ? book.averageRating : 0);
+    return Array.from({ length: 5 }, (_, index) => (
+      <div className={styles.ratingIcon} key={index}>
+        <Image
+          key={index}
+          src={index < averageRating ? YellowStarIcon : StarIconEmpty}
+          alt="Star"
+          width={18}
+          height={18}
+        />
+      </div>
+    ));
+  };
+
   return (
     <div className={styles.bookCoverParent}>
       <Image
@@ -34,20 +58,15 @@ const BookCoverDetails: React.FC<BookCoverDetailsProps> = ({
         <div className={styles.ratingLabels}>
           <div className={styles.ratingText}>Ratings</div>
           <div className={styles.ratingCount}>
-            from {book.reviews ? `${book.reviews.length} reviews` : `0 review`}{" "}
+            from {book?.reviews ? `${book.reviews.length} reviews` : `0 review`}{" "}
           </div>
         </div>
         <div className={styles.ratingContainerMain}>
           <div className={styles.ratingStars}>
-            <div className={styles.ratingValue}>{Math.floor(book.averageRating)}</div>
-            <div className={styles.ratingStarIcons}>
-              <Image
-                src={FiveStarRating}
-                alt="average rating"
-                width={84}
-                height={20}
-              />
+            <div className={styles.ratingValue}>
+              {Math.floor(book?.averageRating ? book.averageRating : 0)}
             </div>
+            <div className={styles.ratingStarIcons}>{renderStarIcons()}</div>
           </div>
           <div className={styles.ratingGraph}>
             {" "}
@@ -69,10 +88,10 @@ const BookCoverDetails: React.FC<BookCoverDetailsProps> = ({
             width={19.5}
             height={19.5}
             alt=""
-            src={book.isFavorite ? FavoriteIconFilled : FavoriteIcon}
+            src={book?.isFavorite ? FavoriteIconFilled : FavoriteIcon}
           />
           <div className={styles.addToFavorites}>
-            {book.isFavorite ? "Remove from favorites" : "Add to favorites"}
+            {book?.isFavorite ? "Remove from favorites" : "Add to favorites"}
           </div>
         </div>
       </button>

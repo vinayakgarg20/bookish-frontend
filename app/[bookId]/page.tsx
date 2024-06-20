@@ -1,18 +1,15 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Book } from "@/app/interfaces/Book";
-import { Review } from "@/app/interfaces/Review";
-import { getApi, postApi } from "@/app/services/apiService";
-import { ServiceType } from "@/app/utils/baseUrls";
 import BookDetails from "@/app/[bookId]/components/BookDetails/BookDetails";
 import Reviews from "@/app/[bookId]/components/Reviews/Reviews";
 import BookCoverDetails from "@/app/[bookId]/components/BookCoverDetails/BookCoverDetails";
 import styles from "./styles/BookPage.module.css";
-import LoginModal from "../auth/components/LoginModal/LoginModal";
-import SignupModal from "../auth/components/SignupModal/SignupModal";
-import { useAuth } from "../hooks/useAuth";
-import { AuthContext } from "../AuthContext";
+import LoginModal from "../auth/LoginModal/LoginModal";
+import SignUpModal from "../auth/SignupModal/SignupModal";
+import { useBookDetails } from "@/app/[bookId]/hooks/useBookDetails";
+import { AuthContext } from "@/app/auth/context/AuthContext";
+import { toggleFavorite } from "@/app/services/bookService";
+import { showErrorToast } from "../services/apiService";
 
 interface BookDetailsPageProps {
   params: {
@@ -21,63 +18,27 @@ interface BookDetailsPageProps {
 }
 
 const BookDetailsPage: React.FC<BookDetailsPageProps> = ({ params }) => {
-  const router = useRouter();
-  const [book, setBook] = useState<Book | null>(null);
-  const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  const { authState, login, logout } = useAuth();
-  const { triggerBooksFetch } = useContext(AuthContext);
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const { authState, login, logout } = useContext(AuthContext);
+  const { book, fetchBookDetails } = useBookDetails(params.bookId);
 
   useEffect(() => {
     fetchBookDetails();
-  }, [params.bookId, authState.isAuthenticated, triggerBooksFetch]);
-
-  const fetchBookDetails = async () => {
-    const userToken = authState.userToken;
-    const headers = userToken ? { Authorization: `Bearer ${userToken}` } : undefined;
-
-    try {
-      const response = await getApi(`${params.bookId}`, headers, ServiceType.BOOKS);
-
-      if (response?.data) {
-        setBook(response.data);
-        setReviews(response.data.reviews || []);
-      } else {
-        console.error("Failed to fetch book details:", response.error);
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
-  };
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authState, params.bookId]);
   const handleToggleFavorite = async () => {
-    const userToken = authState.userToken;
-    if (userToken) {
-      const headers = { Authorization: `Bearer ${userToken}` };
-
-      try {
-        await postApi(`${params.bookId}/toggle-favorite`, {}, headers, ServiceType.BOOKS);
-
-        const response = await getApi(`${params.bookId}`, headers, ServiceType.BOOKS);
-
-        if (response?.data) {
-          setBook(response.data);
-        } else {
-          console.error("Failed to update favorite status:", response.error);
-        }
-      } catch (error) {
-        console.error("An error occurred:", error);
+    if (authState.userToken) {
+      const response = await toggleFavorite(params.bookId, authState);
+      if (response.success) {
+        fetchBookDetails();
+      } else {
+        showErrorToast(`Failed to update favorite status: ${response.error}`);
       }
     } else {
       openLoginModal();
     }
   };
-
-  const handleReviewsUpdated = (updatedReviews: Review[]) => {
-    setReviews(updatedReviews);
-  };
-
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
   };
@@ -86,54 +47,48 @@ const BookDetailsPage: React.FC<BookDetailsPageProps> = ({ params }) => {
     setIsLoginModalOpen(false);
   };
 
-  const openSignupModal = () => {
+  const openSignUpModal = () => {
     setIsLoginModalOpen(false);
-    setIsSignupModalOpen(true);
+    setIsSignUpModalOpen(true);
   };
 
-  const closeSignupModal = () => {
-    setIsSignupModalOpen(false);
+  const closeSignUpModal = () => {
+    setIsSignUpModalOpen(false);
   };
 
-  const handleLoginSuccess = (userToken: string) => {
-    login(userToken);
+  const handleLoginSuccess = () => {
+    login();
     closeLoginModal();
-    triggerBooksFetch(); // Trigger book details fetch after login
   };
-
-  const handleSignupSuccess = (userToken: string) => {
-    login(userToken);
-    closeSignupModal();
-    triggerBooksFetch(); // Trigger book details fetch after signup
+  const handleSignUpSuccess = () => {
+    login();
+    closeSignUpModal();
   };
-
   return (
     <main className={styles.main}>
-      {book && (
+      {book ? (
         <div className={styles.bookDetailsContainer}>
-          <BookCoverDetails onToggleFavorite={handleToggleFavorite} book={book} />
+          <BookCoverDetails
+            onToggleFavorite={handleToggleFavorite}
+            bookId={params.bookId}
+          />
           <div className={styles.bookDetailsAndReviews}>
-            <BookDetails book={book} className={styles.bookDetails} />
-            <Reviews
-              bookId={params.bookId}
-              reviews={reviews}
-              onReviewsUpdated={handleReviewsUpdated}
-              isAuthenticated={authState.isAuthenticated}
-            />
+            <BookDetails bookId={params.bookId} />
+            <Reviews bookId={params.bookId} />
           </div>
         </div>
-      )}
+      ) : null}
       {isLoginModalOpen && (
         <LoginModal
           onClose={closeLoginModal}
           onLoginSuccess={handleLoginSuccess}
-          openSignupModal={openSignupModal}
+          openSignUpModal={openSignUpModal}
         />
       )}
-      {isSignupModalOpen && (
-        <SignupModal
-          onClose={closeSignupModal}
-          onSignupSuccess={handleSignupSuccess}
+      {isSignUpModalOpen && (
+        <SignUpModal
+          onClose={closeSignUpModal}
+          onSignUpSuccess={handleSignUpSuccess}
           openLoginModal={openLoginModal}
         />
       )}

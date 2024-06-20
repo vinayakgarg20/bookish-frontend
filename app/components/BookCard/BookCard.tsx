@@ -58,9 +58,6 @@ const BookCard: React.FC<BookCardProps> = ({ book, onFavoriteToggle }) => {
             </div>
             <div className={styles.ratingNumber}>{book.averageRating}</div>
           </div>
-          <div className={styles.reviewCount}>
-            from {book.reviews ? `${book.reviews.length} reviews` : `0 review`}{" "}
-          </div>
         </div>
       </div>
     </div>

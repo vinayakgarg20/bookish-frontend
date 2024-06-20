@@ -1,18 +1,22 @@
-// components/SignupModal.tsx
-import React, { useState } from 'react';
-import styles from '../../styles/auth.module.css';
-import { registerUser } from '../../services/authService';
+import React, { useState } from "react";
+import styles from "../styles/auth.module.css";
+import { registerUser } from "../services/authService";
+import { showErrorToast } from "@/app/services/apiService";
 
-interface SignupModalProps {
+interface SignUpModalProps {
   onClose: () => void;
-  onSignupSuccess: (userToken:string) => void;
+  onSignUpSuccess: () => void;
   openLoginModal: () => void;
 }
 
-const SignupModal: React.FC<SignupModalProps> = ({ onClose, onSignupSuccess, openLoginModal }) => {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const SignUpModal: React.FC<SignUpModalProps> = ({
+  onClose,
+  onSignUpSuccess,
+  openLoginModal,
+}) => {
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,14 +24,14 @@ const SignupModal: React.FC<SignupModalProps> = ({ onClose, onSignupSuccess, ope
     try {
       const response = await registerUser(email, username, password);
       if (response.success) {
-        localStorage.setItem('userToken', response.token);
-        localStorage.setItem('userName', response.username);
-        onSignupSuccess(response.token);
+        localStorage.setItem("userToken", response.token);
+        localStorage.setItem("userName", response.username);
+        onSignUpSuccess();
       } else {
-        console.error(response.error);
+        showErrorToast(response.error);
       }
     } catch (error) {
-      console.error('Error registering user:', error);
+      showErrorToast(`Error registering user: ${error}`);
     }
   };
 
@@ -66,15 +70,22 @@ const SignupModal: React.FC<SignupModalProps> = ({ onClose, onSignupSuccess, ope
               required
             />
           </div>
-          <button type="submit" className={styles.modalButton}>Sign up</button>
+          <button type="submit" className={styles.modalButton}>
+            Sign up
+          </button>
         </form>
         <p className={styles.modalText}>
-          Already have an account? <a href="#" onClick={openLoginModal}>Login</a>
+          Already have an account?{" "}
+          <a href="#" onClick={openLoginModal}>
+            Login
+          </a>
         </p>
-        <button onClick={onClose} className={styles.modalCloseButton}>Close</button>
+        <button onClick={onClose} className={styles.modalCloseButton}>
+          Close
+        </button>
       </div>
     </div>
   );
 };
 
-export default SignupModal;
+export default SignUpModal;
